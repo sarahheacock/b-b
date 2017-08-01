@@ -42,16 +42,6 @@ db.once("open", function(){
 });
 
 
-// app.use(function(req, res, next){
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   if(req.method === "OPTIONS"){
-//     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-//     return res.status(200).json({});
-//   }
-//   next();
-// });
-
 
 //======ROUTES==============================================
 //5942f613d3804004f852cd4c

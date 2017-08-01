@@ -35,8 +35,7 @@ AvailableSchema.statics.updateDates = function(req, callback) {
   if(end < begin){
 
     dateArr.forEach(function(thisDate, dindex){
-      if (req.user) const id = req.user.pageID
-      else const id = req.page._id;
+      const id = (req.user) ? req.user.pageID : req.page._id;
 
       Available.findOne({ pageID: id, date: thisDate }, function(err, date){
 

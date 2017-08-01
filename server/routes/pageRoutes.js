@@ -1,4 +1,3 @@
-const nodemailer = require('nodemailer');
 const express = require("express");
 
 const pageRoutes = express.Router();
@@ -7,6 +6,9 @@ const Available = require("../models/available").Available;
 const User = require("../models/user").User;
 
 const config = require('../configure/config');
+
+const Slack = require('node-slack');
+const slack = new Slack(config.url);
 
 
 pageRoutes.param("pageID", function(req, res, next, id){
@@ -39,39 +41,25 @@ pageRoutes.param("section", function(req,res,next,id){
 
 
 //================MAIL==================================
-pageRoutes.post("/sayHello", function(req, res) {
-    // Not the movie transporter!
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-        auth: {
-            user: config.user, // Your email id
-            pass: config.pass // Your password
-        }
-    });
-
-    //const text = 'Hello world from \n\n' + req.body.name;
-
-    const mailOptions = {
-        from: '"Nancy Darr" <balanace.test@gmail.com>', // sender address
-        to: config.to, // list of receivers
-        subject: 'Web Site Message', // Subject line
-        //text: text //, // plaintext body
-        html: req.body.message // You can choose to send an HTML body instead
-    };
-
-    transporter.sendMail(mailOptions, function(error, info){
-        if(error) {
-            console.log(error);
-            res.json({yo: 'error'});
-        }
-        else {
-            console.log('Message sent: ' + info.response);
-            res.json({yo: info.response});
-        };
-    });
+pageRoutes.post("/sayHello", function(req, res){
+  slack.send({
+    text: req.body.message,
+    channel: '#portfolio',
+    username: req.body.name,
+    attachments: [
+      {
+        title: 'Phone Number',
+        text: req.body.phone
+      },
+      {
+        title: 'Email Address',
+        text: req.body.email
+      }
+    ]
+  });
+  res.json({success: true});
 });
+
 
 //create user
 pageRoutes.post('/user-setup', function(req, res, next) {
@@ -95,6 +83,9 @@ pageRoutes.post('/user-setup', function(req, res, next) {
 
 //===================GET SECTIONS================================
 //get page
+pageRoutes.get("/:pageID", function(req, res){
+  res.json(req.page);
+});
 
 //get section
 pageRoutes.get("/:pageID/:section", function(req, res){

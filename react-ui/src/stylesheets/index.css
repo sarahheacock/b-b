@@ -1,0 +1,309 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Verdana, Geneva, sans-serif;
+  background-color: WhiteSmoke;
+  color: #07889B; /*Teal*/
+  position: relative;
+}
+
+.brand {
+  color: #E37222;
+  font-family: 'Pacifico';
+}
+
+a {
+  color: #07889B;
+}
+
+p {
+  color: DimGray;
+}
+
+b {
+  color: #07889B;
+}
+
+button {
+  margin: 1%;
+}
+
+
+.sampleImg {
+  width: 200px;
+}
+
+/*h3 {
+  color: #07889B;
+}*/
+
+/*a:link {
+    text-decoration: none;
+    color: #07889B;
+}
+a:visited {
+    text-decoration: none;
+    color: #07889B;
+}
+a:hover {
+  text-decoration: none;
+  color: #07889B;
+}*/
+
+a:active {
+    text-decoration: none;
+}
+
+/*a:hover {
+  color: #53868B;
+}*/
+
+
+
+.container-fluid {
+  margin: 0px;
+  padding: 0px;
+}
+
+
+.App {
+  text-align: center; }
+
+.main-content {
+
+  max-width: 1000px;
+  margin: 0 auto;
+  margin-top: 1%;
+  /*margin-top: 6%;
+  margin-bottom: 3%;*/
+  background-color: WhiteSmoke;
+
+  padding: 2%;
+  /*padding-top: 5%;*/
+  padding-bottom: 3%;
+  /*border-radius: 2%;*/
+  overflow-x: hidden;
+}
+
+.page {
+  margin: 0;
+  top: 0;
+}
+
+.head {
+  color: WhiteSmoke;
+  background-color: #07889B;
+  margin: 0;
+  margin-top: -3%;
+  padding: 2%;
+  padding-top: 3%;
+  /*padding-top: 8%;*/
+}
+
+.head-title{
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.login {
+    color: #53868B;
+    /*text-align: center;*/
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    color: #07889B;
+}
+
+.nav-tabs > li.active > a:focus {
+    outline: 0;
+}
+
+/*.navigation {
+  left: 0;
+  margin-right: 0;
+  position: sticky;
+}*/
+
+
+/*.carousel-control.left {
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 100%);
+}
+.carousel-control.right {
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 100%);
+}*/
+header{
+  /*background-color: #07889B;*/
+  top: 0;
+  background-position: center;
+  position: sticky;
+  /*margin-bottom: 3%;*/
+  z-index: -1;
+}
+
+
+.carouselImg {
+  width: 100%;
+  margin: 0 auto;
+
+  /*padding: 2%;*/
+  /*height: 100%;*/
+}
+
+.summary {
+  max-width: 90%;
+  padding: 2%;
+  padding-bottom: 3%;
+  margin: 0 auto;
+}
+
+
+
+.about {
+  text-align: left;
+}
+
+.well {
+  background-image: linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 100%);
+  margin-bottom: 0;
+  margin-bottom: 2%;
+}
+
+.content {
+  max-width: 1000px;
+  background-color: White;
+  padding: 3%;
+  margin: 0 auto;
+  border-radius: 2%;
+  margin-bottom: 1%;
+}
+
+.researchGate {
+  border-radius: 50%;
+  width: 50px;
+}
+
+.researchGate:hover {
+  text-decoration: none;
+  box-shadow: 5px 5px 2px #888888;
+}
+
+a:hover{
+  text-decoration: none;
+}
+
+
+img{
+ max-width: 200px;
+ margin: 0 auto;
+ padding: 2%;
+}
+
+
+.icon {
+  padding: 0.5%;
+  margin: 1%;
+}
+
+
+
+.lower-content {
+  background: WhiteSmoke;
+  /*height: 100%;*/
+
+  /*width: 100%;*/
+}
+
+.home-content {
+
+  max-width: 1000px;
+  margin: 0 auto;
+  /*margin-bottom: 3%;*/
+  background-color: WhiteSmoke;
+  padding: 2%;
+  /*padding-top: 1%;*/
+  /*border-radius: 2%;*/
+  overflow-x: hidden;
+}
+
+.alertMessage {
+  margin: 0 auto;
+  margin-bottom: 2%;
+  width: 50%;
+}
+
+.add {
+  margin:3%;
+}
+
+.edit{
+  margin:1%;
+}
+
+.select{
+  color: white;
+}
+
+nav > li {
+  color: #66B9BF
+}
+
+footer {
+  color: WhiteSmoke;
+  background-color: #07889B;
+  /*height: 20%;*/
+  width: 100%;
+
+  /*margin: 0px auto;*/
+  /*padding: 2%;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;*/
+  /*z-index: 10;*/
+  /*padding-bottom: 5%;*/
+  /*max-width: 700px;
+  margin: 0 auto;*/
+}
+
+i {
+  color: WhiteSmoke;
+}
+
+.foot {
+  margin: 0px;
+}
+
+.foot-content {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 5%;
+}
+
+.ai {
+  color: #EEAA7B
+}
+
+.ai:hover{
+  color: #3b5998;
+}
+
+.fa {
+  color: #EEAA7B
+}
+
+.fa-facebook-square:hover{
+  color: #3b5998;
+  /*background-color: White;*/
+}
+
+.fa-linkedin-square:hover{
+  color: #0077B5;
+  /*background-color: White;*/
+}
+
+.fa-envelope:hover{
+  color: rgb(64, 153, 255);
+}
+
+.link:hover{
+  color: #53868B;
+}
