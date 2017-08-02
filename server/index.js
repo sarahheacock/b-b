@@ -5,11 +5,11 @@ const app = express();
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
-const config = require('./controllers/configure/config');
+const config = require('./configure/config');
 
-let testConfig = require('config'); //we load the db location from the JSON files
+const testConfig = require('config'); //we load the db location from the JSON files
 //db options
-let options = {
+const options = {
   server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
   replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } }
 };
@@ -20,14 +20,14 @@ let options = {
 // const refreshRoutes = express.Router();
 
 
-const Page = require("./controllers/models/page").Page;
+// const Page = require("./models/page").Page;
 // const Available = require("./controllers/models/available").Available;
 // const User = require("./controllers/models/user").User;
 const jwt = require('jsonwebtoken');
 
 
 // const roomRoutes = require("./controllers/routes/roomRoutes");
-const pageRoutes = require("./controllers/routes/pageRoutes");
+const pageRoutes = require("./routes/pageRoutes");
 // const lockedAdminRoutes = require("./controllers/routes/lockedAdminRoutes");
 // const lockedUserRoutes = require("./controllers/routes/lockedUserRoutes");
 
@@ -51,7 +51,7 @@ db.once("open", function(){
 //don't show the log when it is test
 // if(config.util.getEnv('NODE_ENV') !== 'test') {
 //   //use morgan to log at command line
-   app.use(morgan('dev')); //'combined' outputs the Apache style LOGs
+  //  app.use(morgan('dev')); //'combined' outputs the Apache style LOGs
 // }
 
 app.use(bodyParser.json());
