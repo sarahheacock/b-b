@@ -4,7 +4,6 @@ const roomRoutes = express.Router();
 const Page = require("../models/page").Page;
 const Available = require("../models/available").Available;
 const ObjectID = require("mongodb").ObjectID
-const config = require('../configure/config');
 
 
 roomRoutes.param("pageID", function(req, res, next, id){

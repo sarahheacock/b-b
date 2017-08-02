@@ -5,10 +5,6 @@
   "engines": {
     "node": "6.11.x"
   },
-  "scripts": {
-    "start": "node server",
-    "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
-  },
   "cacheDirectories": [
     "node_modules",
     "react-ui/node_modules"
@@ -17,6 +13,7 @@
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
     "cloudinary": "^1.9.0",
+    "config": "^1.26.1",
     "express": "^4.14.1",
     "jsonwebtoken": "^7.4.1",
     "mongoose": "^4.11.5",
@@ -35,5 +32,14 @@
     "react"
   ],
   "license": "MIT",
-  "devDependencies": {}
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.5.0"
+  },
+  "scripts": {
+    "start": "set NODE_ENV=dev&&node server",
+    "test": "mocha --timeout 10000",
+    "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+  }
 }

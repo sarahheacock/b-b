@@ -37,11 +37,11 @@ const makeid = function(){
 
 
 const UserSchema = new Schema({
-  // name: {
-  //   type: String,
-  //   required: true,
-  //   trim: true
-  // },
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
   email: {
     type: String,
     unique: true,
@@ -66,21 +66,10 @@ const UserSchema = new Schema({
     type: String,
     default: makeid
   },
-  pageID: Schema.Types.ObjectId,
-  //upcoming: [UpcomingSchema],
+  pageID: Schema.Types.ObjectId
 });
 
-// UpcomingSchema.post("save", function(next){
-//   const upcoming = this;
-//   if(upcoming.event.userID){
-//     User.findById(upcoming.event.userID, function(err, user){
-//       if(err || !up) return next(err);
-//       user.upcoming.push()
-//       next();
-//     });
-//   }
-//   next();
-// });
+
 
 UserSchema.statics.authenticate = function(email, password, callback) {
   User.findOne({ email: email })
@@ -122,7 +111,6 @@ UserSchema.pre("save", function(next){
 });
 
 const Upcoming = mongoose.model("Upcoming", UpcomingSchema);
-//const UpcomingFile = mongoose.model("UpcomingFile", UpcomingFileSchema);
 const User = mongoose.model("User", UserSchema);
 
 module.exports = {

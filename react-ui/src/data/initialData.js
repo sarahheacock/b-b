@@ -41,9 +41,9 @@ export const initialCheckout = {
 		}
   },
   payment: {
-		"Name on Card": '',
+		name: '',
     number: '',
-    "Expiration Month": 'Jan 01',
+    month: 'Jan 01',
     "Expiration Year": currentYear.toString(),
     CVV: ''
   },
