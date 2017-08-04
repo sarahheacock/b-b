@@ -17,7 +17,7 @@ const options = {
 
 // const adminAuthRoutes = express.Router();
 // const userAuthRoutes = express.Router();
-// const refreshRoutes = express.Router();
+const refreshRoutes = express.Router();
 
 
 // const Page = require("./models/page").Page;
@@ -29,7 +29,7 @@ const jwt = require('jsonwebtoken');
 // const roomRoutes = require("./controllers/routes/roomRoutes");
 const pageRoutes = require("./routes/pageRoutes");
 // const lockedAdminRoutes = require("./controllers/routes/lockedAdminRoutes");
-// const lockedUserRoutes = require("./controllers/routes/lockedUserRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 
 //=====CONFIGURATION=============================
@@ -59,21 +59,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.text());
 app.use(bodyParser.json({ type: 'application/json'}));
 
-// app.route("/say-hello")
-//   .post(pageRoutes.sayHello);
-//
-// app.route("/user-setup")
-//   .post(pageRoutes.userSetup);
-//
-// app.route("/page")
-//   .post(pageRoutes.pageSetup);
-//
-// app.route("/page/:pageID")
-//   .get(pageRoutes.getPage);
-
-
-
-// refreshRoutes.use(express.static(path.resolve(__dirname, '../react-ui/build')));
+refreshRoutes.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
 // Answer API requests.
 //========================ADMIN LOGIN====================================
@@ -217,6 +203,7 @@ app.use(bodyParser.json({ type: 'application/json'}));
 
 // apply the routes to our application with the prefix /api
 app.use('/page', pageRoutes);
+app.use('/user', userRoutes);
 // app.use('/rooms', roomRoutes);
 //
 // app.use("/api", adminAuthRoutes);
@@ -225,7 +212,7 @@ app.use('/page', pageRoutes);
 // app.use('/locked', userAuthRoutes);
 // app.use('/locked/user', lockedUserRoutes); // ROUTES THAT NEED USER AUTHENTICATION
 
-// app.use(refreshRoutes);
+app.use(refreshRoutes);
 
 //===========================================================
 //==========================================================

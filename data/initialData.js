@@ -9,9 +9,9 @@ export const initialData = {...initial};
 
 export const initialUser = {
   admin: false,
-  id: "",
+  username: "",
   token: "",
-  username: ""
+  email: ""
 };
 
 let bill = {};
