@@ -37,7 +37,7 @@ const makeid = function(){
 
 
 const UserSchema = new Schema({
-  name: {
+  username: {
     type: String,
     required: true,
     trim: true
@@ -45,6 +45,11 @@ const UserSchema = new Schema({
   email: {
     type: String,
     unique: true,
+    required: true,
+    trim: true
+  },
+  phone: {
+    type: String,
     required: true,
     trim: true
   },

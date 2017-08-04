@@ -13,7 +13,7 @@ const should = chai.should();
 chai.use(chaiHttp);
 //Our parent block
 describe('Pages', () => {
-  console.log('Page', Page);
+  // console.log('Page', Page);
   beforeEach((done) => { //Before each test we empty the database
       Page.remove({}, (err) => {
          console.log('removed');
@@ -68,6 +68,7 @@ describe('Pages', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
+          res.body.should.not.have.any.keys("_id", "adminID", "username", "password");
           res.body.should.have.property('home').be.a('array').lengthOf(1);
           res.body.should.have.property('about').be.a('array').lengthOf(2);
           res.body.should.have.property('rooms').be.a('array').lengthOf(1);

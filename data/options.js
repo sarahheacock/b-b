@@ -4,9 +4,10 @@ export const Months = ["Jan 01", "Feb 02", "Mar 03", "Apr 04",
 	   			    "May 05", "Jun 06", "July 07", "Aug 08",
 				    "Sep 09", "Oct 10", "Nov 11", "Dec 12"];
 
-const d = new Date();
-const currentYear = d.getFullYear();
 
+const currentYear = new Date().getFullYear();
 export const Years = [...new Array(12)].map((year, i) => (
   currentYear + i
 ));
+
+export const Contact = ["text", "phone", "email"];

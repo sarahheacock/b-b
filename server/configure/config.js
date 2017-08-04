@@ -5,12 +5,4 @@ module.exports = {
   "cloud_name": "dhd1eov8v",
   "api_key": "654875658944285",
   "api_secret": "CtIeF1oIrKwdMEWZ7ToMgdAAzB0",
-
-  "expError": "Session expired. Log back in again to continue.",
-  "deleteError": "You cannot delete all entries. Deleting all entries will cause errors",
-  "messageError": "Unable to send message",
-  "formError": "* Fill out required fields",
-  "loadError": "Unable to load data",
-  "loginError": "Username and/or password not found.",
-  "messageSuccess": "Message Sent! I will get back to you as soon as I can."
 }
