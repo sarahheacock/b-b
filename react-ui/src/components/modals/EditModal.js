@@ -48,20 +48,20 @@ class EditModal extends React.Component {
   }
 
 
-  onFormAdd = (files) => {
-    let newEdit = {...this.props.edit};
-
-    const file = new File([files[0]], files[0].name, {
-      type: "image/jpeg",
-    });
-    // console.log(files);
-
-    this.props.uploadFile({
-      url: `/admin/file?token=${this.props.user.token}`,
-      edit: newEdit,
-      name: (window.location.pathname === "/") ? "carousel" : "image"
-    }, file);
-  }
+  // onFormAdd = (files) => {
+  //   let newEdit = {...this.props.edit};
+  //
+  //   const file = new File([files[0]], files[0].name, {
+  //     type: "image/jpeg",
+  //   });
+  //   // console.log(files);
+  //
+  //   this.props.uploadFile({
+  //     url: `/admin/file?token=${this.props.user.token}`,
+  //     edit: newEdit,
+  //     name: (window.location.pathname === "/") ? "carousel" : "image"
+  //   }, file);
+  // }
 
 
   render(){
@@ -86,7 +86,7 @@ class EditModal extends React.Component {
           <Modal.Body>
             <EditForm
               formChange={this.onFormChange}
-              formAdd={this.onFormAdd}
+
               editData={editFunc}
               updateState={this.props.updateState}
 
@@ -106,3 +106,5 @@ class EditModal extends React.Component {
 }
 
 export default EditModal;
+
+// formAdd={this.onFormAdd}

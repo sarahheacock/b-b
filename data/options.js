@@ -11,3 +11,10 @@ export const Years = [...new Array(12)].map((year, i) => (
 ));
 
 export const Contact = ["text", "phone", "email"];
+
+module.exports = {
+	Contact,
+	Years,
+	Months,
+	Countries
+}

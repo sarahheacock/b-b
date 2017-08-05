@@ -15,7 +15,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 // import 'bootstrap/dist/css/bootstrap-theme.css';
 import './stylesheets/index.css';
 
-import {NOW, initialData, initialPage, initialUser, initialCheckout, initialMessage, initialEdit} from './data/initialData';
+import {NOW, initialData, initialPage, initialUser, initialCheckout, initialMessage, initialEdit} from '../../data/initialData';
 //=============================================================\
 
 

@@ -5,7 +5,7 @@ import { Col, Row } from 'react-bootstrap';
 import EditModal from '../components/modals/EditModal';
 import EditButton from '../components/buttons/EditButton';
 
-
+// uploadFile={props.uploadFile}
 const Footer = (props) => {
   return (
     <footer className="text-center">
@@ -15,7 +15,7 @@ const Footer = (props) => {
         edit={props.edit}
         message={props.message}
 
-        uploadFile={props.uploadFile}
+
         putData={props.putData}
         postData={props.postData}
         deleteData={props.deleteData}

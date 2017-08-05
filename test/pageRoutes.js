@@ -15,10 +15,7 @@ chai.use(chaiHttp);
 describe('Pages', () => {
   // console.log('Page', Page);
   beforeEach((done) => { //Before each test we empty the database
-      Page.remove({}, (err) => {
-         console.log('removed');
-         done();
-      });
+    Page.remove({}, (err) => { done(); });
   });
 
   describe('/POST page', () => {

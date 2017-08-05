@@ -1,26 +1,30 @@
-import { defaultData, billingData, paymentData } from './formData';
 
-export const blogID = "594952df122ff83a0f190050";
-export const NOW = new Date().setHours(10).getTime();
+const defaultData = require('./formData').defaultData;
+const billingData = require('./formData').billingData;
+const paymentData = require('./formData').paymentData;
+
+const blogID = "594952df122ff83a0f190050";
+const NOW = new Date().setHours(10, 0, 0, 0);
+
 
 let initial = {};
 (Object.keys(defaultData)).forEach((k) => initial[k] = [] );
-export const initialData = {...initial};
+const initialData = Object.assign({}, initial);
 
-export const initialUser = {
+const initialUser = {
   admin: false,
-  username: "",
   token: "",
-  email: ""
+  id: "",
+  username: ""
 };
 
 let bill = {};
 (Object.keys(billingData)).forEach((k) => bill[k] = billingData[k]["default"]);
 
 let pay = {};
-(Object.keys(billingData)).forEach((k) => pay[k] = paymentData[k]["default"]);
+(Object.keys(paymentData)).forEach((k) => pay[k] = paymentData[k]["default"]);
 
-export const initialCheckout = {
+const initialCheckout = {
   selected: {
     roomID: {},
     arrive: NOW,
@@ -28,16 +32,26 @@ export const initialCheckout = {
     guests: 2,
 		cost: 0
   },
-  billing: {...bill},
-  credit: {...pay},
+  billing: bill,
+  credit: pay,
   confirmation: false
 };
 
-export const initialMessage = '';
+const initialMessage = '';
 
-export const initialEdit = {
+const initialEdit = {
 	modalTitle: '',
 	url: '',
-	next: '',
+	next: '#',
 	dataObj: {}
+};
+
+module.exports = {
+  initialEdit,
+  initialMessage,
+  initialCheckout,
+  initialUser,
+  initialData,
+  NOW,
+  blogID
 };

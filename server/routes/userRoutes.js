@@ -1,46 +1,145 @@
 //THESE ROUTES HELP USERS CREATE ACCOUNTS
 //ACCESS ACCOUNT INFORMATION
-//UPDATE BILLING, CREDIT, AND UPCOMING
+//UPDATE USER BILLING, USER CREDIT, AND UPCOMING
 const express = require("express");
-const ObjectId = require('mongodb').ObjectID;
+const config = require('../configure/config');
+const superSecret = config.secret;
+const jwt = require('jsonwebtoken');
 const userRoutes = express.Router();
 
 const User = require("../models/user").User;
 const mid = require('../middleware/middleware');
 
 
-//========parameters==================================
-userRoutes.param("userID", (req, res, next, id) => {
-  User.findById(id, function(err, doc){
-    if(err) return next(err);
-    if(!doc){
-      err = new Error("Not Found");
-      err.status = 404;
-      return next(err);
+//creates the checkout.billing in the front end
+const addressData = require('../../data/formData').addressData;
+const contactData = require('../../data/formData').contactData;
+const paymentData = require('../../data/formData').paymentData;
+
+const passport = require('passport');
+const FacebookStrategy = require('passport-facebook').Strategy;
+
+
+const fbOptions = {
+  clientID: config.FACEBOOK_APP_ID,
+  clientSecret: config.FACEBOOK_APP_SECRET,
+  callbackURL: config.FACEBOOK_CALLBACKURL,
+  profileFields: ['id', 'name', 'email']
+};
+
+passport.use(new FacebookStrategy(fbOptions,
+  (token, refreshToken, profile, next) => {
+  User.findOne({email: profile.email}).exec((err, user) => {
+    if(err){
+      next(err);
     }
-    req.user = doc;
+    if(!user){
+      const newUser = new User({email: profile.email, name: profile.name, facebookID: profile.id});
+      newUser.save((err, user) => {
+        if(err){
+          err = new Error("Unable to create profile.");
+          err.status = 400;
+          next(err);
+        }
+        req.user = user;
+        next();
+      });
+    }
+    req.user = user;
+    next();
+  })
+}));
+
+
+//========parameters==================================
+// userRoutes.param("userID", (req, res, next, id) => {
+//   User.findById(id, function(err, doc){
+//     if(err) return next(err);
+//     if(!doc){
+//       err = new Error("User Not Found");
+//       err.status = 404;
+//       return next(err);
+//     }
+//     req.user = doc;
+//   });
+// });
+
+//=============res.json output================================================
+const formatUserOutput = (user) => {
+  const token = jwt.sign({userID: user.userID}, superSecret, {
+    expiresIn: '1d' //expires in one day
   });
-});
+
+  let billing = {};
+  const userBilling = user.billing.split('/');
+  (Object.keys(contactData)).forEach((k, i) => {
+    if(user[k]) billing[k] = user[k];
+    else billing[k] = contactData[k]["default"];
+  });
+  (Object.keys(addressData)).forEach((k, i) => {
+    if(userBilling[i]) billing[k] = userBilling[i];
+    else billing[k] = addressData[k]["default"];
+  });
+
+  let credit = {};
+  (Object.keys(paymentData)).forEach((k, i) => {
+    if(user["credit"][k]) credit[k] = user["credit"][k];
+    else credit[k] = paymentData[k]["default"];
+  });
+
+  return {
+    user: {
+      admin: false,
+      token: token,
+      id: user._id,
+      username: user.name
+    },
+    checkout: {
+      billing: billing,
+      credit: credit,
+    }
+  }
+};
 
 
 //================GET AND EDIT USER=====================================================
 //create user
 userRoutes.post('/', mid.formatUserInput, (req, res, next) => {
-  // if(err) next(err);
   const user = new User(req.newUser);
 
-  user.save(function(err, user){
+  user.save((err, user) => {
     if(err){
       if(err.message.includes('duplicate')){
         err = new Error("Email provided has already been used.");
-        err.status = 404;
+        err.status = 400;
       }
       return next(err);
     }
+
     res.status(201);
-    res.json(user);
+    res.json(formatUserOutput(user));
   });
 });
+
+userRoutes.post('/login', (req, res, next) => {
+  User.authenticate(req.body.email, req.body.password, (err, user) => {
+    if(err) return next(err);
+
+    res.status(200);
+    res.json(formatUserOutput(user));
+  });
+});
+
+userRoutes.get('/facebook', passport.authenticate('facebook'));
+
+userRoutes.get('/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  (req, res) => {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+    res.status(200);
+    res.json(formatUserOutput(req.user));
+  });
 
 
 // lockedUserRoutes.get("/:userID", mid.authorizeUser, function(req, res, next){

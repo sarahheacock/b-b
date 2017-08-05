@@ -2,9 +2,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const Schema = mongoose.Schema;
 
-const temp = new Date().toString().split(' ');
-const NOW = new Date(temp[0] + " " + temp[1] + " " + temp[2] + " " + temp[3] + " 10:00:00").getTime();
-
+const addressData = require('../../data/formData').addressData;
+const defaultBilling = (Object.keys(addressData)).map((k) => addressData[k]["default"]).join('/');
 
 const UpcomingSchema = new Schema({
   start: Number,
@@ -25,7 +24,7 @@ const UpcomingSchema = new Schema({
 });
 
 
-const makeid = function(){
+const makeid = () => {
     let text = "";
     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -50,18 +49,24 @@ const UserSchema = new Schema({
   },
   phone: {
     type: Number,
-    required: true,
-    trim: true
+    trim: true,
+  },
+  contact: {
+    type: String,
+    trim: true,
+    default: 'email'
   },
   password: {
     type: String,
-    required: true,
     trim: true
+  },
+  facebookID: {
+    type: String
   },
   billing: {
     type: String,
     trim: true,
-    default: ''
+    default: defaultBilling
   },
   credit: {
     name: {type: String, default: ''},
@@ -76,43 +81,47 @@ const UserSchema = new Schema({
 
 
 
-UserSchema.statics.authenticate = function(email, password, callback) {
-  User.findOne({ email: email })
-      .exec(function (error, user) {
-        if (error) {
-          return callback(error);
-        } else if ( !user ) {
-          let err = new Error('User not found.');
-          err.status = 401;
-          return callback(err);
-        }
-        bcrypt.compare(password, user.password , function(error, result) {
-          if (result === true) {
-            return callback(null, user);
-          } else {
-            return callback();
+UserSchema.statics.authenticate = (email, password, next) => {
+
+  if(!(!email) && !(!password)){
+    User.findOne({ email: email })
+        .exec(function (error, user) {
+          if (error) {
+            return next(error);
           }
-        })
-      });
+          else if (!user) {
+            let err = new Error('User not found.');
+            err.status = 400;
+            return next(err);
+          }
+          bcrypt.compare(password, user.password , function(error, result) {
+            if (result === true){
+              return next(null, user);
+            }
+            else {
+              let err = new Error('Incorrect password for given email.');
+              err.status = 401;
+              return next(err);
+            }
+          })
+        });
+  }
+  else {
+    let err = new Error("*Fill out required fields.");
+    err.status = 400;
+    return next(err);
+  }
 }
 
 
 
 UserSchema.pre("save", function(next){
   let user = this;
-  if(user.password.length <= 16){
-    bcrypt.hash(user.password, 10, function(err, hash) {
-      if (err) {
-        return next(err);
-      }
-      user.password = hash;
-
-      next();
-    })
-  }
-  else {
+  bcrypt.hash(user.password, 10, function(err, hash) {
+    if (err) return next(err);
+    user.password = hash;
     next();
-  }
+  })
 });
 
 const Upcoming = mongoose.model("Upcoming", UpcomingSchema);

@@ -1,15 +1,15 @@
 import * as AdminActionTypes from '../actiontypes/admin';
 import axios from 'axios';
 
-import {errorStatus} from '../data/errorMessages';
-import {initialUser, initialCheckout, initialMessage, initialEdit, initialData, blogID} from '../data/initialData';
+// import {errorStatus} from '../../data/errorMessages';
+import {initialUser, initialCheckout, initialMessage, initialEdit, initialData, blogID} from '../../../data/initialData';
 
 //=======================================================
-const validateForm = (newData) => {
-  return Object.keys(newData).reduce((a, b) => {
-    return a && newData[b] !== '' && newData[b] !== undefined && newData[b].length > 0 && newData[b][0] !== '';
-  }, true);
-}
+// const validateForm = (newData) => {
+//   return Object.keys(newData).reduce((a, b) => {
+//     return a && newData[b] !== '' && newData[b] !== undefined && newData[b].length > 0 && newData[b][0] !== '';
+//   }, true);
+// }
 
 export const updateState = (newState) => {
   return {
@@ -25,16 +25,16 @@ export const getData = (url, thisPage) => {
     return axios.get(url)
       .then(response => {
         console.log("response", response.data);
-        if(response.data.success === false){
-          dispatch(updateState({
-            user: initialUser,
-            checkout: initialCheckout,
-            message: {
-              error: "Session expired. Log back in again to continue.",
-              success: ""
-            }
-          }));
-        }
+        // if(response.data.success === false){
+        //   dispatch(updateState({
+        //     user: initialUser,
+        //     checkout: initialCheckout,
+        //     message: {
+        //       error: "Session expired. Log back in again to continue.",
+        //       success: ""
+        //     }
+        //   }));
+        // }
 
         let res = {};
         (Object.keys(initialData)).forEach((k) => res[k] = response.data[k]);
@@ -50,10 +50,7 @@ export const getData = (url, thisPage) => {
         console.log("error", error);
         //alert("Unable to load content at this time.")
         dispatch(updateState({
-          message: {
-            error: "Unable to fetch data",
-            success: ""
-          }
+          message: error.message
         }));
       });
   }
@@ -66,47 +63,46 @@ export const putData = (url, newData) => {
     return axios.put(url, newData)
       .then(response => {
         console.log("response data", response.data);
-        if(response.data.success === false){
-          dispatch(updateState({
-            message: {
-              error: "Session expired. Log back in again to continue.",
-              success: ""
-            }
-          }));
-        }
-        else if(url.length <= 37 && url.contains("/locked/user")){
-          //we are editing information on book page
-          dispatch(updateState({
-            edit: initialEdit,
-            message: initialMessage,
-            data: initialData,
-            billing: {
-              ...newData.billing,
-              ...response.data.billing
-            },
-            payment: {
-              ...newData.payment,
-              ...response.data.payment
-            }
-
-          }));
-        }
-        else {
-          const res = (Array.isArray(response.data)) ? response.data : [response.data];
-          dispatch(updateState({
-            edit: initialEdit,
-            message: initialMessage,
-            data: res,
-          }));
-        }
+        dispatch(updateState({message: 'Yay!'}));
+        // if(response.data.success === false){
+        //   dispatch(updateState({
+        //     message: {
+        //       error: "Session expired. Log back in again to continue.",
+        //       success: ""
+        //     }
+        //   }));
+        // }
+        // else
+        // if(url.length <= 37 && url.contains("/locked/user")){
+        //   //we are editing information on book page
+        //   dispatch(updateState({
+        //     edit: initialEdit,
+        //     message: initialMessage,
+        //     data: initialData,
+        //     billing: {
+        //       ...newData.billing,
+        //       ...response.data.billing
+        //     },
+        //     payment: {
+        //       ...newData.payment,
+        //       ...response.data.payment
+        //     }
+        //
+        //   }));
+        // }
+        // else {
+        //   const res = (Array.isArray(response.data)) ? response.data : [response.data];
+        //   dispatch(updateState({
+        //     edit: initialEdit,
+        //     message: initialMessage,
+        //     data: res,
+        //   }));
+        // }
       })
       .catch(error => {
         console.log(error);
         dispatch(updateState({
-          message: {
-            error: "Unable to edit data",
-            success: ""
-          }
+          message: error.message
         }));
       });
 
@@ -120,109 +116,111 @@ export const postData = (url, newData) => {
 
     return axios.post(url, newData)
       .then(response => {
+        dispatch(updateState({message: 'Yay!'}));
         // console.log("newData", newData);
         // console.log("response data", response.data);
-        if(response.data.success === false){
-          dispatch(updateState({
-            message: {
-              error: "Session expired. Log back in again to continue.",
-              success: ''
-            }
-          }));
-        }
-        else {
-          if (url.includes('say')) { //if posting message
-            dispatch(updateState({
-              message: {
-                "success": "Message sent!",
-                "error": ""
-              }
-            }));
-          }
-          else if (url.includes('login')) { //if posting login
-            if(url.includes('api')){
-              dispatch(updateState({
-                edit: initialEdit,
-                message: initialMessage,
-                user: response.data
-              }));
-            }
-            else if(url.includes('locked')){
-              dispatch(updateState({
-                edit: initialEdit,
-                message: initialMessage,
-                user: response.data.user,
-                billing: {
-                  ...initialCheckout.billing,
-                  ...response.data.billing
-                },
-                payment: {
-                  ...initialCheckout.payment,
-                  ...response.data.payment
-                }
-
-              }));
-            }
-          }
-          else if (url.includes('user-setup')) { //if signing up, login
-            dispatch(postData('/locked/userlogin', {
-              email: newData.email,
-              password: newData.password
-            }));
-          }
-          else if (url.includes('page')) { //if posting new page
-            dispatch(updateState({
-              edit: initialEdit,
-              message: initialMessage,
-              data: response.data
-            }));
-          }
-          else { //if posting upcoming
-            dispatch(updateState({
-              message: {
-                "success": "Thank you",
-                "error": ""
-              },
-              edit: initialEdit,
-              checkout: initialCheckout,
-            }));
-          }
-        }
+        // if(response.data.success === false){
+        //   dispatch(updateState({
+        //     message: {
+        //       error: "Session expired. Log back in again to continue.",
+        //       success: ''
+        //     }
+        //   }));
+        // }
+        // else {
+        //   if (url.includes('say')) { //if posting message
+        //     dispatch(updateState({
+        //       message: {
+        //         "success": "Message sent!",
+        //         "error": ""
+        //       }
+        //     }));
+        //   }
+        //   else if (url.includes('login')) { //if posting login
+        //     if(url.includes('api')){
+        //       dispatch(updateState({
+        //         edit: initialEdit,
+        //         message: initialMessage,
+        //         user: response.data
+        //       }));
+        //     }
+        //     else if(url.includes('locked')){
+        //       dispatch(updateState({
+        //         edit: initialEdit,
+        //         message: initialMessage,
+        //         user: response.data.user,
+        //         billing: {
+        //           ...initialCheckout.billing,
+        //           ...response.data.billing
+        //         },
+        //         payment: {
+        //           ...initialCheckout.payment,
+        //           ...response.data.payment
+        //         }
+        //
+        //       }));
+        //     }
+        //   }
+        //   else if (url.includes('user-setup')) { //if signing up, login
+        //     dispatch(postData('/locked/userlogin', {
+        //       email: newData.email,
+        //       password: newData.password
+        //     }));
+        //   }
+        //   else if (url.includes('page')) { //if posting new page
+        //     dispatch(updateState({
+        //       edit: initialEdit,
+        //       message: initialMessage,
+        //       data: response.data
+        //     }));
+        //   }
+        //   else { //if posting upcoming
+        //     dispatch(updateState({
+        //       message: {
+        //         "success": "Thank you",
+        //         "error": ""
+        //       },
+        //       edit: initialEdit,
+        //       checkout: initialCheckout,
+        //     }));
+        //   }
+        // }
       })
       .catch(error => {
         console.log(error);
-        if (url.includes('say')) { //if posting message
-          dispatch(updateState({
-            message: {
-              "success": "",
-              "error": "Unable to send Message"
-            }
-          }));
-        }
-        else if (url.includes('login')) { //if posting login
-          dispatch(updateState({
-            message: {
-              "success": "",
-              "error": "Username and/or password not found"
-            }
-          }));
-        }
-        else if (url.includes('page')) { //if posting new page
-          dispatch(updateState({
-            message: {
-              "success": "",
-              "error": "Unable to add data"
-            }
-          }));
-        }
-        else { //if posting upcoming
-          dispatch(updateState({
-            message: {
-              "success": "",
-              "error": "Unable to book stay."
-            }
-          }));
-        }
+        dispatch(updateState({message: error.message}));
+        // if (url.includes('say')) { //if posting message
+        //   dispatch(updateState({
+        //     message: {
+        //       "success": "",
+        //       "error": "Unable to send Message"
+        //     }
+        //   }));
+        // }
+        // else if (url.includes('login')) { //if posting login
+        //   dispatch(updateState({
+        //     message: {
+        //       "success": "",
+        //       "error": "Username and/or password not found"
+        //     }
+        //   }));
+        // }
+        // else if (url.includes('page')) { //if posting new page
+        //   dispatch(updateState({
+        //     message: {
+        //       "success": "",
+        //       "error": "Unable to add data"
+        //     }
+        //   }));
+        // }
+        // else { //if posting upcoming
+        //   dispatch(updateState({
+        //     message: {
+        //       "success": "",
+        //       "error": "Unable to book stay."
+        //     }
+        //   }));
+        // }
       });
   }
 };
@@ -233,32 +231,34 @@ export const deleteData = (url) => {
     return axios.delete(url)
     .then(response => {
       console.log("response data", response.data);
-      if(response.data.success === false){
-        dispatch(updateState({
-          // user: initialUser,
-          // checkout: initialCheckout,
-          message: {
-            error: "Session expired. Log back in again to continue.",
-            success: ''
-          }
-        }));
-      }
-      else {
-        dispatch(updateState({
-          edit: initialEdit,
-          message: initialMessage,
-          data: response.data,
-        }));
-      }
+      dispatch(updateState({message: 'Yay!'}));
+      // if(response.data.success === false){
+      //   dispatch(updateState({
+      //     // user: initialUser,
+      //     // checkout: initialCheckout,
+      //     message: {
+      //       error: "Session expired. Log back in again to continue.",
+      //       success: ''
+      //     }
+      //   }));
+      // }
+      // else {
+      //   dispatch(updateState({
+      //     edit: initialEdit,
+      //     message: initialMessage,
+      //     data: response.data,
+      //   }));
+      // }
     })
     .catch(error => {
-      console.log(error);
-      dispatch(updateState({
-        message: {
-          error: "Unable to delete data",
-          success: ""
-        }
-      }));
+      dispatch(updateState({message: error.message}));
+      // console.log(error);
+      // dispatch(updateState({
+      //   message: {
+      //     error: "Unable to delete data",
+      //     success: ""
+      //   }
+      // }));
     });
   }
 };

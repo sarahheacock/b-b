@@ -17,7 +17,7 @@ const contactData = {
     componentClass: 'input',
     default: ''
   },
-  "Contact Me": {
+  contact: {
     type: 'other',
     default: 'text'
   }
@@ -63,7 +63,7 @@ const addressData = {
 
 //===============info on user message form=========================================
 
-const notRequired = ["bold", "image", "carousel", "link", "Address Line 2", "Contact Me"];
+const notRequired = ["bold", "image", "carousel", "link", "Address Line 2"];
 
 //the keys help reorder the form
 //and provide default values if adding
@@ -212,7 +212,19 @@ const loginData = {
 }
 
 
-const signUpData = Object.assign({}, contactData, {
+const signUpData = {
+  name: {
+    type: 'text',
+    placeholder: 'Full Name',
+    componentClass: 'input',
+    default: ''
+  },
+  email: {
+    type: 'text',
+    placeholder: 'Email',
+    componentClass: 'input',
+    default: ''
+  },
   password: {
     type: 'password',
     placeholder: 'Password',
@@ -225,7 +237,7 @@ const signUpData = Object.assign({}, contactData, {
     componentClass: 'input',
     default: ''
   }
-});
+};
 
 const billingData = Object.assign({}, contactData, addressData );
 
@@ -275,6 +287,7 @@ const messageData = Object.assign({},
 
 module.exports = {
   addressData,
+  contactData,
   notRequired,
   defaultData,
   loginData,

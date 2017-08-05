@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const signUpData = require('../../data/formData').signUpData;
 const notRequired = require('../../data/formData').notRequired;
 
+
 //============input functions==========================
 const formatPhone = (num) => {
   return num.split('').filter((n) => {
@@ -39,34 +40,26 @@ const checkEmail = (mail) => {
 //==========output========================================
 const formatUserInput = (req, res, next) => {
   let newUser = {};
-  Object.keys(req.body).map((k) => {
-    if(k === "phone") newUser[k] = formatPhone(req.body[k]);
-    else newUser[k] = req.body[k];
-  });
-
-
+  Object.keys(req.body).map((k) => { newUser[k] = req.body[k]; });
   const cForm = checkForm(newUser, signUpData);
 
   if(!cForm){
     let err = new Error("*Fill out required fields.");
+    err.status = 400;
     return next(err);
   }
   else {
     const pass = checkPassword(newUser);
-    const cPhone = checkPhone(newUser.phone);
     const cEmail = checkEmail(newUser.email);
-    console.log("phone", newUser.phone);
 
     if(!pass){
       let err = new Error("Passwords do not match.");
-      return next(err);
-    }
-    else if(!cPhone){
-      let err = new Error("Incorrect phone input.");
+      err.status = 400;
       return next(err);
     }
     else if(!cEmail){
       let err = new Error("Incorrect email input.")
+      err.status = 400;
       return next(err);
     }
   }
@@ -75,7 +68,9 @@ const formatUserInput = (req, res, next) => {
   return next();
 };
 
-// route middleware to verify a token
+
+
+// verifies token after login
 const authorizeUser = (req, res, next) => {
   // check header or url parameters or post parameters for token
   const token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -89,6 +84,7 @@ const authorizeUser = (req, res, next) => {
       else { // if everything is good, save to request for use in other routes
         if(decoded.userID !== req.user.userID){
           let err = new Error("You are not authorized to access this account.");
+          err.status = 403;
           return next(err);
         }
         next();
@@ -101,6 +97,36 @@ const authorizeUser = (req, res, next) => {
     next(err);
   }
 };
+
+
+// const signInUser = (req, res, next) => {
+//   if (req.body.username && req.body.password) {
+//     Page.authenticate(req.body.username, req.body.password, function (error, user) {
+//       if (error || !user) {
+//         let err = new Error(config.loginError);
+//         err.status = 401;
+//         return next(err);
+//       }
+//       else {
+//         var token = jwt.sign({adminID: user.adminID}, app.get('superSecret'), {
+//           expiresIn: '1d' //expires in one day
+//         });
+//
+//         res.json({
+//           admin: true,
+//           token: token,
+//           id: user._id,
+//           username: user.username
+//         });
+//       }
+//     });
+//   }
+//   else {
+//     let err = new Error(config.loginError);
+//     err.status = 401;
+//     return next(err);
+//   }
+// }
 
 
 
